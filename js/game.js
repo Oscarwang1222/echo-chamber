@@ -425,10 +425,10 @@ const Game = {
       clickHandler = `Game.handleChapter3Choice('${card.id}', '${card.bias}', this)`;
     }
 
-    // 第二章和第三章选项更大
+    // 第二章和第三章：一行两个，更窄
     const isLarge = this.state.currentChapter >= 2;
     const cardStyle = isLarge
-      ? "animation-delay: " + (index * 0.03) + "s; cursor: pointer; margin-bottom: 16px; min-height: 140px;"
+      ? "animation-delay: " + (index * 0.02) + "s; cursor: pointer; margin: 8px; width: calc(50% - 16px); display: inline-block; vertical-align: top; min-height: 100px;"
       : "animation-delay: " + (index * 0.1) + "s; cursor: pointer; margin-bottom: 12px;";
 
     return `
@@ -440,9 +440,6 @@ const Game = {
           ${source.icon} ${source.name}
         </div>
         <div class="content">${card.content}</div>
-        <div class="tags">
-          ${card.tags.map(t => `<span class="tag">${t}</span>`).join('')}
-        </div>
       </div>
     `;
   },
