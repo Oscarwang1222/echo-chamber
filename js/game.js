@@ -238,13 +238,12 @@ const Game = {
     const shuffledNeutral = neutralPool.sort(() => Math.random() - 0.5);
 
     let result = [];
-
+    
     if (chapter === 1) {
-      // 第一章：1支持，1反对，0中立 = 2个（用户说"应试教育vs全面发展"，但这里是转基因主题）
-      // 实际上第一章是试探主题，应该是平衡的
+      // 第一章：2支持，2反对，0中立 = 4个（1:1比例）
       result = [
-        shuffledPro[0],
-        shuffledCon[0]
+        ...shuffledPro.slice(0, 2),
+        ...shuffledCon.slice(0, 2)
       ].filter(c => c);
     } else if (chapter === 2) {
       // 第二章：8支持，1反对，1中立 = 10个
@@ -372,7 +371,7 @@ const Game = {
         </div>
 
         <div style="margin: 20px 0; text-align: center; color: var(--text-muted);">
-          第 <span id="choiceNum">1</span> / 10 次选择
+          第 <span id="choiceNum">1</span> / 4 次选择
         </div>
 
         <div class="feed-container" id="feedContainer" style="max-height: 500px; overflow-y: auto;">
@@ -395,15 +394,15 @@ const Game = {
   loadChapter1Cards() {
     const feed = document.getElementById('feedContainer');
     if (!feed) return;
-    
+
     feed.innerHTML = '';
-    
+
     // 生成一组卡片（第一章：1支持+1反对）
     const cardSet = this.generateCardSet(this.state.usedCardIds, 1);
-    
+
     // 标记为已使用
     cardSet.forEach(c => this.state.usedCardIds.push(c.id));
-    
+
     // 渲染
     this.currentCardSet = cardSet;
     cardSet.forEach((card, i) => {
@@ -462,7 +461,7 @@ const Game = {
     if (proCount) proCount.textContent = proNum;
     if (conCount) conCount.textContent = conNum;
     if (neutralCount) neutralCount.textContent = neutralNum;
-    if (choiceNum) choiceNum.textContent = Math.min(this.chapter1ClickCount + 1, 10);
+    if (choiceNum) choiceNum.textContent = Math.min(this.chapter1ClickCount + 1, 4);
 
     // 隐藏已选卡片，显示下一组
     element.style.opacity = '0';
@@ -544,7 +543,7 @@ const Game = {
       this.chapter1ClickCount = (this.chapter1ClickCount || 0) + 1;
       this.updateStats(bias, 1);
 
-      if (this.chapter1ClickCount >= 5) {
+      if (this.chapter1ClickCount >= 4) {
         setTimeout(() => {
           const btn = document.getElementById('chapter1End');
           if (btn) btn.style.display = 'inline-flex';
@@ -944,12 +943,12 @@ const Game = {
       <div style="width: 100%; max-width: 700px;">
         <p class="chapter-title">${chapter.title}</p>
         <h2>${chapter.subtitle}</h2>
-        
+
         <div class="card" style="margin: 20px 0; text-align: left; border-color: var(--accent-yellow); background: linear-gradient(135deg, #1a1a2e, #16213e);">
           <h3 style="color: var(--accent-yellow); margin-bottom: 12px;">📌 ${event.title}</h3>
           <p style="font-size: 0.95rem; line-height: 1.6;">${event.description}</p>
         </div>
-        
+
         <p class="narrative" style="margin-top: 20px;">
           ${chapter.narrative}
         </p>
