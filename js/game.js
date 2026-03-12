@@ -244,30 +244,28 @@ const Game = {
       result = [
         ...shuffledPro.slice(0, 2),
         ...shuffledCon.slice(0, 2)
-      ].filter(c => c);
+      ];
     } else if (chapter === 2) {
       // 第二章：8支持，1反对，1中立 = 10个
       result = [
         ...shuffledPro.slice(0, 8),
         shuffledCon[0],
         shuffledNeutral[0]
-      ].filter(c => c);
+      ];
     } else if (chapter === 3) {
       // 第三章：根据茧房指数决定反对数量
-      // 茧房指数越高，反对越少；茧房指数越低，反对越多
       const cobweb = this.state.cobwebIndex || 50;
-      // 茧房指数从30开始，逐渐下降
-      // 反对数量从1到5
       const conCount = Math.max(1, Math.floor((100 - cobweb) / 20));
-      const proCount = 10 - conCount - 1; // 剩余是支持，留1个中立
+      const proCount = 10 - conCount - 1;
       result = [
         ...shuffledPro.slice(0, proCount),
         ...shuffledCon.slice(0, conCount),
         shuffledNeutral[0]
-      ].filter(c => c);
+      ];
     }
 
-    return result;
+    // 过滤undefined并打乱最终结果
+    return result.filter(c => c).sort(() => Math.random() - 0.5);
   },
 
   // 渲染一组卡片供选择（每组2支持+1反对+1中立）
