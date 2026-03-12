@@ -224,8 +224,8 @@ const Game = {
   // ===== 新的游戏逻辑 =====
 
   // 生成组合卡片集（根据章节确定比例）
-  // 第一章：1:1:0（1反对，1支持，0中立）
-  // 第二章：1:8:1（1反对，8支持，1中立）
+  // 第一章：2:2（2支持，2反对）
+  // 第二章：8:1:1（8支持，1反对，1中立）
   // 第三章：随着茧房指数下降增加反对数量
   generateCardSet(usedIds = [], chapter = 1) {
     const proPool = GAME_DATA.proCards.filter(c => !usedIds.includes(c.id));
@@ -425,9 +425,15 @@ const Game = {
       clickHandler = `Game.handleChapter3Choice('${card.id}', '${card.bias}', this)`;
     }
 
+    // 第二章和第三章显示两列
+    const isMultiColumn = this.state.currentChapter >= 2;
+    const cardStyle = isMultiColumn 
+      ? "animation-delay: " + (index * 0.05) + "s; cursor: pointer; margin-bottom: 12px; width: calc(50% - 6px); display: inline-block; vertical-align: top;"
+      : "animation-delay: " + (index * 0.1) + "s; cursor: pointer; margin-bottom: 12px;";
+
     return `
       <div class="info-card" data-id="${card.id}" data-bias="${card.bias}"
-           style="animation-delay: ${index * 0.1}s; cursor: pointer; margin-bottom: 12px;"
+           style="${cardStyle}"
            onclick="${clickHandler}">
         <div class="source">
           <span class="source-icon" style="background: ${source.color}"></span>
@@ -469,17 +475,21 @@ const Game = {
     setTimeout(() => {
       element.remove();
 
-      // 隐藏剩余选项
-      const feed = document.getElementById('feedContainer');
-      const remaining = feed.querySelectorAll('.info-card');
-      remaining.forEach(card => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateX(-20px)';
-      });
-
-      // 显示下一章按钮
-      const btn = document.getElementById('chapter1End');
-      if (btn) btn.style.display = 'inline-flex';
+      // 检查是否完成4次选择
+      if (this.chapter1ClickCount >= 4) {
+        // 完成4次选择，显示下一章按钮
+        const btn = document.getElementById('chapter1End');
+        if (btn) btn.style.display = 'inline-flex';
+      } else {
+        // 隐藏剩余选项，加载下一组
+        const feed = document.getElementById('feedContainer');
+        const remaining = feed.querySelectorAll('.info-card');
+        remaining.forEach(card => {
+          card.style.opacity = '0';
+          card.style.transform = 'translateX(-20px)';
+        });
+        setTimeout(() => this.loadChapter1Cards(), 300);
+      }
     }, 300);
   },
 
