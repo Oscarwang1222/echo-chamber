@@ -425,9 +425,15 @@ const Game = {
       clickHandler = `Game.handleChapter3Choice('${card.id}', '${card.bias}', this)`;
     }
 
+    // 第二章和第三章选项更大
+    const isLarge = this.state.currentChapter >= 2;
+    const cardStyle = isLarge
+      ? "animation-delay: " + (index * 0.03) + "s; cursor: pointer; margin-bottom: 16px; min-height: 140px;"
+      : "animation-delay: " + (index * 0.1) + "s; cursor: pointer; margin-bottom: 12px;";
+
     return `
       <div class="info-card" data-id="${card.id}" data-bias="${card.bias}"
-           style="animation-delay: ${index * 0.05}s; cursor: pointer; margin-bottom: 12px; min-height: 120px;"
+           style="${cardStyle}"
            onclick="${clickHandler}">
         <div class="source">
           <span class="source-icon" style="background: ${source.color}"></span>
@@ -730,7 +736,7 @@ const Game = {
         </div>
 
         <div style="margin: 15px 0; text-align: center; color: var(--text-muted);">
-          第 <span id="chapter2Progress">1</span> / 10 次选择
+          请选择你认同的观点（<span id="chapter2Progress">0</span>/1 已选）
         </div>
 
         <div class="web-container" id="webContainer" style="display: none;">
@@ -752,7 +758,7 @@ const Game = {
     this.loadChapter2Cards();
   },
 
-  // 加载第二章卡片
+  // 加载第二章卡片（一次性加载全部10个选项）
   loadChapter2Cards() {
     const feed = document.getElementById('feedContainer2');
     if (!feed) return;
@@ -774,7 +780,7 @@ const Game = {
     });
   },
 
-  // 处理第二章选择
+  // 处理第二章选择（一次选择后显示下一章按钮）
   handleChapter2Choice(cardId, bias, element) {
     // 记录选择
     this.chapter2Choices.push({ cardId, bias });
@@ -785,7 +791,7 @@ const Game = {
 
     // 更新进度
     const progress = document.getElementById('chapter2Progress');
-    if (progress) progress.textContent = Math.min(this.chapter2ClickCount + 1, 10);
+    if (progress) progress.textContent = this.chapter2ClickCount;
 
     // 隐藏已选卡片
     element.style.opacity = '0';
@@ -793,22 +799,10 @@ const Game = {
 
     setTimeout(() => {
       element.remove();
-
-      // 检查是否完成10次选择
-      if (this.chapter2ClickCount >= 10) {
-        // 完成10次选择，显示下一章按钮
-        const btn = document.getElementById('chapter2End');
-        if (btn) btn.style.display = 'inline-flex';
-      } else {
-        // 隐藏剩余选项，加载下一组
-        const feed = document.getElementById('feedContainer2');
-        const remaining = feed.querySelectorAll('.info-card');
-        remaining.forEach(card => {
-          card.style.opacity = '0';
-          card.style.transform = 'translateX(-20px)';
-        });
-        setTimeout(() => this.loadChapter2Cards(), 300);
-      }
+      
+      // 显示下一章按钮
+      const btn = document.getElementById('chapter2End');
+      if (btn) btn.style.display = 'inline-flex';
     }, 300);
   },
 
@@ -978,7 +972,7 @@ const Game = {
         </div>
 
         <div style="margin: 15px 0; text-align: center; color: var(--text-muted);">
-          第 <span id="chapter3Progress">1</span> / 10 次选择
+          请选择你认同的观点（<span id="chapter3Progress">0</span>/1 已选）
         </div>
 
         <div class="feed-container" id="feedContainer3" style="max-height: 450px; overflow-y: auto;">
@@ -1018,7 +1012,7 @@ const Game = {
     });
   },
 
-  // 处理第三章选择
+  // 处理第三章选择（一次选择后显示下一章按钮）
   handleChapter3Choice(cardId, bias, element) {
     // 记录选择
     this.chapter3Choices.push({ cardId, bias });
@@ -1029,7 +1023,7 @@ const Game = {
 
     // 更新进度
     const progress = document.getElementById('chapter3Progress');
-    if (progress) progress.textContent = Math.min(this.chapter3ClickCount + 1, 10);
+    if (progress) progress.textContent = this.chapter3ClickCount;
 
     // 隐藏已选卡片
     element.style.opacity = '0';
@@ -1037,22 +1031,10 @@ const Game = {
 
     setTimeout(() => {
       element.remove();
-
-      // 检查是否完成10次选择
-      if (this.chapter3ClickCount >= 10) {
-        // 完成10次选择，显示下一章按钮
-        const btn = document.getElementById('chapter3End');
-        if (btn) btn.style.display = 'inline-flex';
-      } else {
-        // 隐藏剩余选项，加载下一组
-        const feed = document.getElementById('feedContainer3');
-        const remaining = feed.querySelectorAll('.info-card');
-        remaining.forEach(card => {
-          card.style.opacity = '0';
-          card.style.transform = 'translateX(-20px)';
-        });
-        setTimeout(() => this.loadChapter3Cards(), 300);
-      }
+      
+      // 显示下一章按钮
+      const btn = document.getElementById('chapter3End');
+      if (btn) btn.style.display = 'inline-flex';
     }, 300);
   },
 
