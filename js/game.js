@@ -72,14 +72,14 @@ const Game = {
 
   // 渲染章节进度指示器
   renderChapterProgress(current) {
-    const chapters = ['start', 'interest', 'chapter1', 'chapter2', 'chapter3', 'chapter4', 'ending'];
+    const chapters = ['start', 'chapter1', 'chapter2', 'chapter3', 'chapter4', 'ending'];
     const currentIdx = chapters.indexOf(current);
 
     let html = '<div class="chapter-progress">';
     for (let i = 1; i <= 4; i++) {
       let cls = 'chapter-dot';
-      if (i < currentIdx) cls += ' completed';
-      if (i === currentIdx) cls += ' active';
+      if (i <= currentIdx) cls += ' completed';
+      if (i === currentIdx + 1) cls += ' active';
       html += `<div class="${cls}"></div>`;
     }
     html += '</div>';
