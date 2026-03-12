@@ -228,40 +228,61 @@ const Game = {
   // 第二章：8:1:1（8支持，1反对，1中立）
   // 第三章：随着茧房指数下降增加反对数量
   generateCardSet(usedIds = [], chapter = 1) {
-    const proPool = GAME_DATA.proCards.filter(c => !usedIds.includes(c.id));
-    const conPool = GAME_DATA.conCards.filter(c => !usedIds.includes(c.id));
+    // 华为阵营 vs 小米阵营
+    const huaweiPool = GAME_DATA.proHuaweiCards.filter(c => !usedIds.includes(c.id));
+    const miPool = GAME_DATA.proMiCards.filter(c => !usedIds.includes(c.id));
     const neutralPool = GAME_DATA.neutralCards.filter(c => !usedIds.includes(c.id));
 
     // 打乱顺序
-    const shuffledPro = proPool.sort(() => Math.random() - 0.5);
-    const shuffledCon = conPool.sort(() => Math.random() - 0.5);
+    const shuffledHuawei = huaweiPool.sort(() => Math.random() - 0.5);
+    const shuffledMi = miPool.sort(() => Math.random() - 0.5);
     const shuffledNeutral = neutralPool.sort(() => Math.random() - 0.5);
 
     let result = [];
     
     if (chapter === 1) {
-      // 第一章：2支持，2反对，0中立 = 4个（1:1比例）
+      // 第一章：2华为，2小米，0中立 = 4个（平衡试探）
       result = [
-        ...shuffledPro.slice(0, 2),
-        ...shuffledCon.slice(0, 2)
+        ...shuffledHuawei.slice(0, 2),
+        ...shuffledMi.slice(0, 2)
       ];
     } else if (chapter === 2) {
-      // 第二章：8支持，1反对，1中立 = 10个
-      result = [
-        ...shuffledPro.slice(0, 8),
-        shuffledCon[0],
-        shuffledNeutral[0]
-      ];
+      // 第二章：8用户倾向，1对立，1中立 = 10个
+      // 根据用户倾向决定
+      const userTendency = this.state.userTendency || 'pro_huawei';
+      if (userTendency === 'pro_huawei') {
+        result = [
+          ...shuffledHuawei.slice(0, 8),
+          shuffledMi[0],
+          shuffledNeutral[0]
+        ];
+      } else {
+        result = [
+          ...shuffledMi.slice(0, 8),
+          shuffledHuawei[0],
+          shuffledNeutral[0]
+        ];
+      }
     } else if (chapter === 3) {
-      // 第三章：根据茧房指数决定反对数量
+      // 第三章：根据茧房指数决定对立阵营数量
       const cobweb = this.state.cobwebIndex || 50;
-      const conCount = Math.max(1, Math.floor((100 - cobweb) / 20));
-      const proCount = 10 - conCount - 1;
-      result = [
-        ...shuffledPro.slice(0, proCount),
-        ...shuffledCon.slice(0, conCount),
-        shuffledNeutral[0]
-      ];
+      const oppositeCount = Math.max(1, Math.floor((100 - cobweb) / 20));
+      const mainCount = 10 - oppositeCount - 1;
+      
+      const userTendency = this.state.userTendency || 'pro_huawei';
+      if (userTendency === 'pro_huawei') {
+        result = [
+          ...shuffledHuawei.slice(0, mainCount),
+          ...shuffledMi.slice(0, oppositeCount),
+          shuffledNeutral[0]
+        ];
+      } else {
+        result = [
+          ...shuffledMi.slice(0, mainCount),
+          ...shuffledHuawei.slice(0, oppositeCount),
+          shuffledNeutral[0]
+        ];
+      }
     }
 
     // 过滤undefined并打乱最终结果
@@ -495,16 +516,20 @@ const Game = {
     const conNum = this.state.userChoices.filter(c => c.bias === 'con').length;
     const neutralNum = this.state.userChoices.filter(c => c.bias === 'neutral').length;
 
-    // 根据选择确定用户倾向
-    if (proNum > conNum && proNum > neutralNum) {
-      this.state.userTendency = 'pro'; // 支持全面发展
-    } else if (conNum > proNum && conNum > neutralNum) {
-      this.state.userTendency = 'con'; // 支持应试教育
+    // 根据选择确定用户倾向 - 华为 vs 小米
+    const huaweiNum = this.state.userChoices.filter(c => c.bias === 'pro_huawei').length;
+    const miNum = this.state.userChoices.filter(c => c.bias === 'pro_mi').length;
+    
+    if (huaweiNum > miNum) {
+      this.state.userTendency = 'pro_huawei';
+    } else if (miNum > huaweiNum) {
+      this.state.userTendency = 'pro_mi';
     } else {
-      this.state.userTendency = 'neutral'; // 中立
+      // 平局，随机一个
+      this.state.userTendency = Math.random() > 0.5 ? 'pro_huawei' : 'pro_mi';
     }
 
-    console.log('用户倾向:', this.state.userTendency, { pro: proNum, con: conNum, neutral: neutralNum });
+    console.log('用户倾向:', this.state.userTendency, { huawei: huaweiNum, mi: miNum });
 
     this.goToScreen('chapter2');
   },
@@ -927,7 +952,12 @@ const Game = {
   startChapter3() {
     this.state.currentChapter = 3;
     const chapter = GAME_DATA.chapters[2];
-    const event = GAME_DATA.chapter3Event;
+    // 根据用户倾向选择事件
+    const userTendency = this.state.userTendency || 'pro_huawei';
+    const event = userTendency === 'pro_huawei' 
+      ? GAME_DATA.chapter3Event.huawei_event 
+      : GAME_DATA.chapter3Event.mi_event;
+    
     this.state.usedCardIds = []; // 重置卡片使用记录
     this.chapter3ClickCount = 0;
     this.chapter3Choices = []; // 记录用户选择
