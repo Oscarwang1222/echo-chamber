@@ -425,15 +425,9 @@ const Game = {
       clickHandler = `Game.handleChapter3Choice('${card.id}', '${card.bias}', this)`;
     }
 
-    // 第二章和第三章显示两列
-    const isMultiColumn = this.state.currentChapter >= 2;
-    const cardStyle = isMultiColumn 
-      ? "animation-delay: " + (index * 0.05) + "s; cursor: pointer; margin-bottom: 12px; width: calc(50% - 6px); display: inline-block; vertical-align: top;"
-      : "animation-delay: " + (index * 0.1) + "s; cursor: pointer; margin-bottom: 12px;";
-
     return `
       <div class="info-card" data-id="${card.id}" data-bias="${card.bias}"
-           style="${cardStyle}"
+           style="animation-delay: ${index * 0.05}s; cursor: pointer; margin-bottom: 12px; min-height: 120px;"
            onclick="${clickHandler}">
         <div class="source">
           <span class="source-icon" style="background: ${source.color}"></span>
@@ -800,16 +794,21 @@ const Game = {
     setTimeout(() => {
       element.remove();
 
-      // 隐藏剩余选项
-      const remaining = feed.querySelectorAll('.info-card');
-      remaining.forEach(card => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateX(-20px)';
-      });
-
-      // 显示下一章按钮
-      const btn = document.getElementById('chapter2End');
-      if (btn) btn.style.display = 'inline-flex';
+      // 检查是否完成10次选择
+      if (this.chapter2ClickCount >= 10) {
+        // 完成10次选择，显示下一章按钮
+        const btn = document.getElementById('chapter2End');
+        if (btn) btn.style.display = 'inline-flex';
+      } else {
+        // 隐藏剩余选项，加载下一组
+        const feed = document.getElementById('feedContainer2');
+        const remaining = feed.querySelectorAll('.info-card');
+        remaining.forEach(card => {
+          card.style.opacity = '0';
+          card.style.transform = 'translateX(-20px)';
+        });
+        setTimeout(() => this.loadChapter2Cards(), 300);
+      }
     }, 300);
   },
 
@@ -1039,13 +1038,20 @@ const Game = {
     setTimeout(() => {
       element.remove();
 
+      // 检查是否完成10次选择
       if (this.chapter3ClickCount >= 10) {
         // 完成10次选择，显示下一章按钮
         const btn = document.getElementById('chapter3End');
         if (btn) btn.style.display = 'inline-flex';
       } else {
-        // 显示模拟环节（第三章的模拟更强调多元视角的效果）
-        this.showSimulation(bias, true);
+        // 隐藏剩余选项，加载下一组
+        const feed = document.getElementById('feedContainer3');
+        const remaining = feed.querySelectorAll('.info-card');
+        remaining.forEach(card => {
+          card.style.opacity = '0';
+          card.style.transform = 'translateX(-20px)';
+        });
+        setTimeout(() => this.loadChapter3Cards(), 300);
       }
     }, 300);
   },
