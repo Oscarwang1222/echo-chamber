@@ -376,16 +376,12 @@ const Game = {
 
         <div class="stats-row" style="justify-content: center; gap: 40px;">
           <div class="stat-item" style="text-align: center;">
-            <div class="stat-value" id="proCount" style="color: var(--accent-blue);">0</div>
-            <div class="stat-label">选择支持方</div>
+            <div class="stat-value" id="proCount" style="color: #e94560;">0</div>
+            <div class="stat-label">选择华为</div>
           </div>
           <div class="stat-item" style="text-align: center;">
-            <div class="stat-value" id="conCount" style="color: var(--accent-red);">0</div>
-            <div class="stat-label">选择反对方</div>
-          </div>
-          <div class="stat-item" style="text-align: center;">
-            <div class="stat-value" id="neutralCount" style="color: var(--accent-green);">0</div>
-            <div class="stat-label">选择中立方</div>
+            <div class="stat-value" id="conCount" style="color: #4f8cff;">0</div>
+            <div class="stat-label">选择小米</div>
           </div>
         </div>
 
@@ -475,14 +471,13 @@ const Game = {
     const neutralCount = document.getElementById('neutralCount');
     const choiceNum = document.getElementById('choiceNum');
 
-    // 计算当前选择数
-    const proNum = this.state.userChoices.filter(c => c.bias === 'pro').length;
-    const conNum = this.state.userChoices.filter(c => c.bias === 'con').length;
-    const neutralNum = this.state.userChoices.filter(c => c.bias === 'neutral').length;
+    // 计算当前选择数 - 华为 vs 小米
+    const huaweiNum = this.state.userChoices.filter(c => c.bias === 'pro_huawei').length;
+    const miNum = this.state.userChoices.filter(c => c.bias === 'pro_mi').length;
 
-    if (proCount) proCount.textContent = proNum;
-    if (conCount) conCount.textContent = conNum;
-    if (neutralCount) neutralCount.textContent = neutralNum;
+    if (proCount) proCount.textContent = huaweiNum;
+    if (conCount) conCount.textContent = miNum;
+    if (neutralCount) neutralCount.textContent = 0;
     if (choiceNum) choiceNum.textContent = Math.min(this.chapter1ClickCount + 1, 4);
 
     // 隐藏已选卡片，显示下一组
@@ -511,12 +506,7 @@ const Game = {
 
   // 结束第一章
   endChapter1() {
-    // 分析用户倾向
-    const proNum = this.state.userChoices.filter(c => c.bias === 'pro').length;
-    const conNum = this.state.userChoices.filter(c => c.bias === 'con').length;
-    const neutralNum = this.state.userChoices.filter(c => c.bias === 'neutral').length;
-
-    // 根据选择确定用户倾向 - 华为 vs 小米
+    // 分析用户倾向 - 华为 vs 小米
     const huaweiNum = this.state.userChoices.filter(c => c.bias === 'pro_huawei').length;
     const miNum = this.state.userChoices.filter(c => c.bias === 'pro_mi').length;
     
