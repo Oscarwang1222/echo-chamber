@@ -1,0 +1,619 @@
+/* === CSS Variables === */
+:root {
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #12121a;
+  --bg-card: #1a1a26;
+  --accent-red: #ff4d6d;
+  --accent-blue: #5e9fff;
+  --accent-green: #3dd9a0;
+  --accent-yellow: #ffcc4d;
+  --text-primary: #f5f5f7;
+  --text-secondary: #9898a6;
+  --text-muted: #5a5a6a;
+  --border-subtle: rgba(255,255,255,0.06);
+  --glow-red: rgba(255, 77, 109, 0.35);
+  --glow-blue: rgba(94, 159, 255, 0.35);
+  --glow-green: rgba(61, 217, 160, 0.35);
+  --glow-yellow: rgba(255, 204, 77, 0.25);
+  
+  --font-display: 'Outfit', 'Noto Sans SC', sans-serif;
+  --font-body: 'Noto Sans SC', sans-serif;
+  
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 28px;
+  
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* === Reset & Base === */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* === Typography === */
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+h3 {
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
+}
+
+p {
+  color: var(--text-secondary);
+}
+
+/* === Buttons === */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 28px;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent-red), #ff6b8a);
+  color: white;
+  box-shadow: 0 4px 20px var(--glow-red);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px var(--glow-red);
+}
+
+.btn-secondary {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+}
+
+.btn-secondary:hover {
+  background: var(--bg-secondary);
+  border-color: rgba(255,255,255,0.12);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+.btn-ghost:hover {
+  color: var(--text-primary);
+  background: rgba(255,255,255,0.05);
+}
+
+/* === Cards === */
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  border: 1px solid var(--border-subtle);
+  transition: all var(--transition-smooth);
+}
+
+.card:hover {
+  border-color: rgba(255,255,255,0.1);
+  transform: translateY(-2px);
+}
+
+/* === Animations === */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from { 
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes ripple {
+  0% { transform: scale(0); opacity: 1; }
+  100% { transform: scale(4); opacity: 0; }
+}
+
+.animate-fade-in {
+  animation: fadeIn var(--transition-smooth) ease-out forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp var(--transition-smooth) ease-out forwards;
+}
+
+/* === Layout === */
+.container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.screen {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 40px 24px;
+  text-align: center;
+}
+
+.screen.active {
+  display: flex;
+}
+
+/* === Progress Bar === */
+.progress-container {
+  width: 100%;
+  max-width: 400px;
+  margin: 20px 0;
+}
+
+.progress-bar {
+  height: 6px;
+  background: var(--bg-card);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-red), var(--accent-yellow));
+  border-radius: 3px;
+  transition: width var(--transition-smooth);
+}
+
+/* === Choice Cards === */
+.choices-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  width: 100%;
+  max-width: 600px;
+  margin-top: 30px;
+}
+
+.choice-card {
+  background: var(--bg-card);
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  padding: 20px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: center;
+}
+
+.choice-card:hover {
+  border-color: var(--accent-red);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 40px rgba(233, 69, 96, 0.2);
+}
+
+.choice-card.selected {
+  border-color: var(--accent-green);
+  background: rgba(78, 204, 163, 0.1);
+}
+
+.choice-icon {
+  font-size: 2.5rem;
+  margin-bottom: 8px;
+}
+
+.choice-label {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* === Info Cards (Feed) === */
+.feed-container {
+  width: 100%;
+  max-width: 500px;
+  max-height: 400px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-right: 8px;
+}
+
+.info-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  text-align: left;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: 1px solid var(--border-subtle);
+  animation: slideInLeft 0.4s ease-out backwards;
+}
+
+.info-card:hover {
+  transform: translateX(8px);
+  border-color: var(--accent-blue);
+}
+
+.info-card .source {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.info-card .source-icon {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.info-card .content {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.info-card .tags {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.info-card .tag {
+  font-size: 0.7rem;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.05);
+  color: var(--text-muted);
+}
+
+/* === Stats Display === */
+.stats-row {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 16px 24px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  min-width: 120px;
+}
+
+.stat-value {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.stat-item.danger .stat-value {
+  color: var(--accent-red);
+}
+
+.stat-item.success .stat-value {
+  color: var(--accent-green);
+}
+
+.stat-item.warning .stat-value {
+  color: var(--accent-yellow);
+}
+
+/* === Web (Cobweb) Visualization === */
+.web-container {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 20px auto;
+}
+
+.web-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.web-line {
+  stroke: var(--accent-red);
+  stroke-width: 2;
+  fill: none;
+  opacity: 0.3;
+}
+
+.web-node {
+  fill: var(--accent-red);
+  transition: all var(--transition-fast);
+}
+
+.web-center {
+  fill: var(--accent-green);
+}
+
+/* === Chapter Title === */
+.chapter-title {
+  margin-bottom: 8px;
+  color: var(--accent-yellow);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* === Narrative Text === */
+.narrative {
+  max-width: 600px;
+  margin: 0 auto 30px;
+}
+
+.narrative p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: 16px;
+}
+
+/* === Ending Stats === */
+.ending-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
+  max-width: 700px;
+  margin: 30px 0;
+}
+
+.ending-stat {
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  text-align: center;
+}
+
+.ending-stat .value {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.ending-stat .label {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+/* === Tips Box === */
+.tips-box {
+  background: linear-gradient(135deg, rgba(79, 140, 255, 0.1), rgba(78, 204, 163, 0.1));
+  border: 1px solid rgba(79, 140, 255, 0.2);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  max-width: 500px;
+  margin: 20px auto;
+  text-align: left;
+}
+
+.tips-box h4 {
+  color: var(--accent-blue);
+  margin-bottom: 12px;
+  font-size: 1rem;
+}
+
+.tips-box ul {
+  list-style: none;
+}
+
+.tips-box li {
+  color: var(--text-secondary);
+  padding: 6px 0;
+  padding-left: 20px;
+  position: relative;
+  font-size: 0.9rem;
+}
+
+.tips-box li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--accent-green);
+}
+
+/* === Responsive === */
+@media (max-width: 600px) {
+  .choices-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .stats-row {
+    gap: 12px;
+  }
+  
+  .stat-item {
+    min-width: 90px;
+    padding: 12px 16px;
+  }
+  
+  .stat-value {
+    font-size: 1.5rem;
+  }
+}
+
+/* === Utility === */
+.hidden {
+  display: none !important;
+}
+
+.mt-2 { margin-top: 16px; }
+.mt-4 { margin-top: 32px; }
+.mt-6 { margin-top: 48px; }
+
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+
+/* === Chapter Progress === */
+.chapter-progress {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.chapter-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 2px solid var(--text-muted);
+  transition: all var(--transition-fast);
+}
+
+.chapter-dot.active {
+  background: var(--accent-yellow);
+  border-color: var(--accent-yellow);
+  box-shadow: 0 0 12px var(--glow-yellow);
+}
+
+.chapter-dot.completed {
+  background: var(--accent-green);
+  border-color: var(--accent-green);
+}
+
+/* === Scrollbar === */
+.feed-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.feed-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.feed-container::-webkit-scrollbar-thumb {
+  background: var(--bg-card);
+  border-radius: 3px;
+}
+
+.feed-container::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* === Background Effects === */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(ellipse at 20% 20%, rgba(255, 77, 109, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(94, 159, 255, 0.08) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* === Better Card Hover === */
+.info-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.info-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--accent-blue);
+  transform: scaleY(0);
+  transition: transform var(--transition-fast);
+}
+
+.info-card:hover::before {
+  transform: scaleY(1);
+}
+
+/* === Stagger Animation === */
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+.stagger-5 { animation-delay: 0.5s; }
