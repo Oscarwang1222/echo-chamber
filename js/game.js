@@ -520,6 +520,7 @@ const Game = {
     }
 
     console.log('用户倾向:', this.state.userTendency, { huawei: huaweiNum, mi: miNum });
+    alert('第一章结束！你的选择：华为 ' + huaweiNum + ' 次，小米 ' + miNum + ' 次，你的倾向是：' + this.state.userTendency);
 
     this.goToScreen('chapter2');
   },
@@ -700,11 +701,6 @@ const Game = {
         this.loadNextCard();
       }
     });
-  },
-
-  // 结束第一章
-  endChapter1() {
-    this.goToScreen('chapter2');
   },
 
   // ===== 第二章：回音壁 =====
