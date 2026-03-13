@@ -785,7 +785,7 @@ const Game = {
     });
   },
 
-  // 处理第二章选择（一次选择后显示下一章按钮）
+  // 处理第二章选择（一次选择后重新加载10个选项）
   handleChapter2Choice(cardId, bias, element) {
     // 记录选择
     this.chapter2Choices.push({ cardId, bias });
@@ -803,7 +803,9 @@ const Game = {
     element.style.transform = 'translateX(-20px)';
 
     setTimeout(() => {
-      element.remove();
+      // 重新加载10个新卡片
+      this.state.usedCardIds = []; // 清空已使用ID，重新从池子里选
+      this.loadChapter2Cards();
       
       // 选够10次才显示下一章按钮
       if (this.chapter2ClickCount >= 10) {
@@ -1024,7 +1026,7 @@ const Game = {
     });
   },
 
-  // 处理第三章选择（一次选择后显示下一章按钮）
+  // 处理第三章选择（一次选择后重新加载10个选项）
   handleChapter3Choice(cardId, bias, element) {
     // 记录选择
     this.chapter3Choices.push({ cardId, bias });
@@ -1042,7 +1044,9 @@ const Game = {
     element.style.transform = 'translateX(-20px)';
 
     setTimeout(() => {
-      element.remove();
+      // 重新加载10个新卡片
+      this.state.usedCardIds = []; // 清空已使用ID，重新从池子里选
+      this.loadChapter3Cards();
       
       // 选够10次才显示下一章按钮
       if (this.chapter3ClickCount >= 10) {
