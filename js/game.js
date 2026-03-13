@@ -241,9 +241,9 @@ const Game = {
     let result = [];
     
     if (chapter === 1) {
-      // 第一章：2华为，2小米，0中立 = 4个（平衡试探）
+      // 第一章：3华为，2小米，0中立 = 5个（平衡试探）
       result = [
-        ...shuffledHuawei.slice(0, 2),
+        ...shuffledHuawei.slice(0, 3),
         ...shuffledMi.slice(0, 2)
       ];
     } else if (chapter === 2) {
@@ -386,7 +386,7 @@ const Game = {
         </div>
 
         <div style="margin: 20px 0; text-align: center; color: var(--text-muted);">
-          第 <span id="choiceNum">1</span> / 4 次选择
+          第 <span id="choiceNum">1</span> / 5 次选择
         </div>
 
         <div class="feed-container" id="feedContainer" style="max-height: 500px; overflow-y: auto;">
@@ -478,7 +478,7 @@ const Game = {
     if (proCount) proCount.textContent = huaweiNum;
     if (conCount) conCount.textContent = miNum;
     if (neutralCount) neutralCount.textContent = 0;
-    if (choiceNum) choiceNum.textContent = Math.min(this.chapter1ClickCount + 1, 4);
+    if (choiceNum) choiceNum.textContent = Math.min(this.chapter1ClickCount + 1, 5);
 
     // 隐藏已选卡片，显示下一组
     element.style.opacity = '0';
@@ -486,9 +486,9 @@ const Game = {
     setTimeout(() => {
       element.remove();
 
-      // 检查是否完成4次选择
-      if (this.chapter1ClickCount >= 4) {
-        // 完成4次选择，显示下一章按钮
+      // 检查是否完成5次选择
+      if (this.chapter1ClickCount >= 5) {
+        // 完成5次选择，显示下一章按钮
         const btn = document.getElementById('chapter1End');
         if (btn) btn.style.display = 'inline-flex';
       } else {
@@ -520,7 +520,6 @@ const Game = {
     }
 
     console.log('用户倾向:', this.state.userTendency, { huawei: huaweiNum, mi: miNum });
-    alert('第一章结束！你的选择：华为 ' + huaweiNum + ' 次，小米 ' + miNum + ' 次，你的倾向是：' + this.state.userTendency);
 
     this.goToScreen('chapter2');
   },
@@ -579,7 +578,7 @@ const Game = {
       // 更新茧房可视化
       this.drawCobweb();
 
-      if (this.chapter2ClickCount >= 5) {
+      if (this.chapter2ClickCount >= 10) {
         setTimeout(() => {
           const btn = document.getElementById('chapter2End');
           if (btn) btn.style.display = 'inline-flex';
@@ -603,7 +602,7 @@ const Game = {
       if (certaintyEl3) certaintyEl3.textContent = Math.round(this.state.certainty);
       if (healthEl3) healthEl3.textContent = Math.round(this.state.cognitiveHealth);
 
-      if (this.chapter3ClickCount >= 3) {
+      if (this.chapter3ClickCount >= 10) {
         setTimeout(() => {
           const btn = document.getElementById('chapter3End');
           if (btn) btn.style.display = 'inline-flex';
@@ -742,7 +741,7 @@ const Game = {
         </div>
 
         <div style="margin: 15px 0; text-align: center; color: var(--text-muted);">
-          请选择你认同的观点（<span id="chapter2Progress">0</span>/1 已选）
+          请选择你认同的观点（<span id="chapter2Progress">0</span>/10 已选）
         </div>
 
         <div class="web-container" id="webContainer" style="display: none;">
@@ -806,9 +805,11 @@ const Game = {
     setTimeout(() => {
       element.remove();
       
-      // 显示下一章按钮
-      const btn = document.getElementById('chapter2End');
-      if (btn) btn.style.display = 'inline-flex';
+      // 选够10次才显示下一章按钮
+      if (this.chapter2ClickCount >= 10) {
+        const btn = document.getElementById('chapter2End');
+        if (btn) btn.style.display = 'inline-flex';
+      }
     }, 300);
   },
 
@@ -983,7 +984,7 @@ const Game = {
         </div>
 
         <div style="margin: 15px 0; text-align: center; color: var(--text-muted);">
-          请选择你认同的观点（<span id="chapter3Progress">0</span>/1 已选）
+          请选择你认同的观点（<span id="chapter3Progress">0</span>/10 已选）
         </div>
 
         <div class="feed-container" id="feedContainer3" style="max-height: 450px; overflow-y: auto; display: flex; flex-wrap: wrap; gap: 12px;">
@@ -1043,9 +1044,11 @@ const Game = {
     setTimeout(() => {
       element.remove();
       
-      // 显示下一章按钮
-      const btn = document.getElementById('chapter3End');
-      if (btn) btn.style.display = 'inline-flex';
+      // 选够10次才显示下一章按钮
+      if (this.chapter3ClickCount >= 10) {
+        const btn = document.getElementById('chapter3End');
+        if (btn) btn.style.display = 'inline-flex';
+      }
     }, 300);
   },
 
