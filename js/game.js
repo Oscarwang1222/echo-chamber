@@ -443,7 +443,7 @@ const Game = {
     // 第二章和第三章：一行两个，更窄
     const isLarge = this.state.currentChapter >= 2;
     const cardStyle = isLarge
-      ? "animation-delay: " + (index * 0.02) + "s; cursor: pointer; margin: 8px; width: calc(50% - 20px) !important; display: inline-block !important; vertical-align: top; min-height: 100px;"
+      ? "animation-delay: " + (index * 0.02) + "s; cursor: pointer; margin: 6px; width: 46% !important; display: inline-block !important; vertical-align: top; min-height: 100px; box-sizing: border-box;"
       : "animation-delay: " + (index * 0.1) + "s; cursor: pointer; margin-bottom: 12px;";
 
     return `
