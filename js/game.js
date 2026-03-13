@@ -443,7 +443,7 @@ const Game = {
     // 第二章和第三章：一行两个，更窄
     const isLarge = this.state.currentChapter >= 2;
     const cardStyle = isLarge
-      ? "animation-delay: " + (index * 0.02) + "s; cursor: pointer; margin: 8px; width: calc(50% - 16px); display: inline-block; vertical-align: top; min-height: 100px;"
+      ? "animation-delay: " + (index * 0.02) + "s; cursor: pointer; margin: 8px; width: calc(50% - 20px) !important; display: inline-block !important; vertical-align: top; min-height: 100px;"
       : "animation-delay: " + (index * 0.1) + "s; cursor: pointer; margin-bottom: 12px;";
 
     return `
@@ -748,7 +748,7 @@ const Game = {
           <svg class="web-svg" viewBox="0 0 200 200"></svg>
         </div>
 
-        <div class="feed-container" id="feedContainer2" style="max-height: 450px; overflow-y: auto; display: flex; flex-wrap: wrap; gap: 12px;">
+        <div class="feed-container" id="feedContainer2" style="max-height: 450px; overflow-y: auto; display: flex !important; flex-wrap: wrap !important; gap: 12px;">
         </div>
 
         <button class="btn btn-primary mt-4" id="chapter2End" onclick="Game.endChapter2()" style="display: none;">
@@ -987,7 +987,7 @@ const Game = {
           请选择你认同的观点（<span id="chapter3Progress">0</span>/10 已选）
         </div>
 
-        <div class="feed-container" id="feedContainer3" style="max-height: 450px; overflow-y: auto; display: flex; flex-wrap: wrap; gap: 12px;">
+        <div class="feed-container" id="feedContainer3" style="max-height: 450px; overflow-y: auto; display: flex !important; flex-wrap: wrap !important; gap: 12px;">
         </div>
 
         <button class="btn btn-primary mt-4" id="chapter3End" onclick="Game.endChapter3()" style="display: none;">
